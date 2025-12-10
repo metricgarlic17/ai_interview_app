@@ -82,68 +82,68 @@ const Agent = ({
     // };
   }, []);
 
-  useEffect(() => {
-    if (messages.length > 0) {
-      setLastMessage(messages[messages.length - 1].content);
-    }
+  // useEffect(() => {
+  //   if (messages.length > 0) {
+  //     setLastMessage(messages[messages.length - 1].content);
+  //   }
 
-    const handleGenerateFeedback = async (messages: SavedMessage[]) => {
-      console.log("handleGenerateFeedback");
+  //   const handleGenerateFeedback = async (messages: SavedMessage[]) => {
+  //     console.log("handleGenerateFeedback");
 
-      const { success, feedbackId: id } = await createFeedback({
-        interviewId: interviewId!,
-        userId: userId!,
-        transcript: messages,
-        feedbackId,
-      });
+  //     const { success, feedbackId: id } = await createFeedback({
+  //       interviewId: interviewId!,
+  //       userId: userId!,
+  //       transcript: messages,
+  //       feedbackId,
+  //     });
 
-      if (success && id) {
-        router.push(`/interview/${interviewId}/feedback`);
-      } else {
-        console.log("Error saving feedback");
-        router.push("/");
-      }
-    };
+  //     if (success && id) {
+  //       router.push(`/interview/${interviewId}/feedback`);
+  //     } else {
+  //       console.log("Error saving feedback");
+  //       router.push("/");
+  //     }
+  //   };
 
-    if (callStatus === CallStatus.FINISHED) {
-      if (type === "generate") {
-        router.push("/");
-      } else {
-        handleGenerateFeedback(messages);
-      }
-    }
-  }, [messages, callStatus, feedbackId, interviewId, router, type, userId]);
+  //   if (callStatus === CallStatus.FINISHED) {
+  //     if (type === "generate") {
+  //       router.push("/");
+  //     } else {
+  //       handleGenerateFeedback(messages);
+  //     }
+  //   }
+  // }, [messages, callStatus, feedbackId, interviewId, router, type, userId]);
 
-  const handleCall = async () => {
-    setCallStatus(CallStatus.CONNECTING);
+  // const handleCall = async () => {
+  //   setCallStatus(CallStatus.CONNECTING);
 
-    if (type === "generate") {
-      await vapi.start(process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!, {
-        variableValues: {
-          username: userName,
-          userid: userId,
-        },
-      });
-    } else {
-      let formattedQuestions = "";
-      if (questions) {
-        formattedQuestions = questions
-          .map((question) => `- ${question}`)
-          .join("\n");
-      }
+  //   if (type === "generate") {
+  //     await vapi.start(process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!, {
+  //       variableValues: {
+  //         username: userName,
+  //         userid: userId,
+  //       },
+  //     });
+  //   } else {
+  //     let formattedQuestions = "";
+  //     if (questions) {
+  //       formattedQuestions = questions
+  //         .map((question) => `- ${question}`)
+  //         .join("\n");
+  //     }
 
-      await vapi.start(interviewer, {
-        variableValues: {
-          questions: formattedQuestions,
-        },
-      });
-    }
-  };
+  //     await vapi.start(interviewer, {
+  //       variableValues: {
+  //         questions: formattedQuestions,
+  //       },
+  //     });
+  //   }
+  // };
 
-  const handleDisconnect = () => {
-    setCallStatus(CallStatus.FINISHED);
-    vapi.stop();
-  };
+  // const handleDisconnect = () => {
+  //   setCallStatus(CallStatus.FINISHED);
+  //   vapi.stop();
+  // };
 
   return (
     <>
